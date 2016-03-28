@@ -11,6 +11,7 @@
 		A94D050D1CA959BE00F4E155 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D050C1CA959BE00F4E155 /* AppDelegate.m */; };
 		A94D050F1CA959BE00F4E155 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A94D050E1CA959BE00F4E155 /* Assets.xcassets */; };
 		A94D05121CA959BE00F4E155 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D05101CA959BE00F4E155 /* LaunchScreen.storyboard */; };
+		A97F589D1CA95ABA0080C411 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A97F589C1CA95ABA0080C411 /* MainViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,8 @@
 		A94D050E1CA959BE00F4E155 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A94D05111CA959BE00F4E155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A94D05131CA959BE00F4E155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A97F589B1CA95ABA0080C411 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		A97F589C1CA95ABA0080C411 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,11 +56,8 @@
 		A94D05071CA959BE00F4E155 /* learning-CoreAnimation */ = {
 			isa = PBXGroup;
 			children = (
-				A94D050B1CA959BE00F4E155 /* AppDelegate.h */,
-				A94D050C1CA959BE00F4E155 /* AppDelegate.m */,
-				A94D050E1CA959BE00F4E155 /* Assets.xcassets */,
-				A94D05101CA959BE00F4E155 /* LaunchScreen.storyboard */,
-				A94D05131CA959BE00F4E155 /* Info.plist */,
+				A97F589E1CA95AC40080C411 /* AppDelegate */,
+				A97F58A01CA95AD80080C411 /* Class */,
 				A94D05081CA959BE00F4E155 /* Supporting Files */,
 			);
 			path = "learning-CoreAnimation";
@@ -69,6 +69,27 @@
 				A94D05091CA959BE00F4E155 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A97F589E1CA95AC40080C411 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				A94D050B1CA959BE00F4E155 /* AppDelegate.h */,
+				A94D050C1CA959BE00F4E155 /* AppDelegate.m */,
+				A94D050E1CA959BE00F4E155 /* Assets.xcassets */,
+				A94D05101CA959BE00F4E155 /* LaunchScreen.storyboard */,
+				A94D05131CA959BE00F4E155 /* Info.plist */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		A97F58A01CA95AD80080C411 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				A97F589B1CA95ABA0080C411 /* MainViewController.h */,
+				A97F589C1CA95ABA0080C411 /* MainViewController.m */,
+			);
+			name = Class;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A94D050D1CA959BE00F4E155 /* AppDelegate.m in Sources */,
+				A97F589D1CA95ABA0080C411 /* MainViewController.m in Sources */,
 				A94D050A1CA959BE00F4E155 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,6 +304,7 @@
 				A94D05181CA959BE00F4E155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
