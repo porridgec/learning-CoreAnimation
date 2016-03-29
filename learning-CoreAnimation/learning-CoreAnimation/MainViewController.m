@@ -19,6 +19,10 @@
 
 @interface MainViewController ()
 
+@property (nonatomic, strong) CALayer *shadowLayer;
+@property (nonatomic, strong) CALayer *pictureLayer;
+@property (nonatomic, assign) BOOL flag;
+
 @end
 
 @implementation MainViewController
@@ -28,8 +32,16 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self drawMyLayer];
-    [self drawShadowLayer];
+    //[self drawShadowLayer];
     [self drawPictureLayer];
+    
+    _flag = YES;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(SCREENSIZE.width / 2 - 25, 50, 50, 50);
+    button.backgroundColor = [UIColor redColor];
+    [button addTarget:self action:@selector(transform:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,31 +52,32 @@
 #pragma mark - draw layer
 
 - (void)drawShadowLayer {
-    CALayer *shadowLayer = [[CALayer alloc] init];
-    shadowLayer.bounds = BOUNDS;
-    shadowLayer.position = POSITION;
-    shadowLayer.cornerRadius = CORNERRADIUS;
-    shadowLayer.shadowColor = [UIColor grayColor].CGColor;
-    shadowLayer.shadowOffset = CGSizeMake(2,2);
-    shadowLayer.shadowOpacity = 1;
-    shadowLayer.borderColor = [UIColor whiteColor].CGColor;
-    shadowLayer.borderWidth = BORDERWIDTH;
-    //shadowLayer.delegate = self;
-    [self.view.layer addSublayer:shadowLayer];
-    [shadowLayer setNeedsDisplay];
+    _shadowLayer = [[CALayer alloc] init];
+    _shadowLayer.bounds = BOUNDS;
+    _shadowLayer.position = POSITION;
+    _shadowLayer.cornerRadius = CORNERRADIUS;
+    _shadowLayer.shadowColor = [UIColor grayColor].CGColor;
+    _shadowLayer.shadowOffset = CGSizeMake(2,2);
+    _shadowLayer.shadowOpacity = 1;
+    _shadowLayer.borderColor = [UIColor whiteColor].CGColor;
+    _shadowLayer.borderWidth = BORDERWIDTH;
+    //_shadowLayer.delegate = self;
+    [self.view.layer addSublayer:_shadowLayer];
+    [_shadowLayer setNeedsDisplay];
 }
 
 - (void)drawPictureLayer {
-    CALayer *pictureLayer = [[CALayer alloc] init];
-    pictureLayer.bounds = BOUNDS;
-    pictureLayer.position = POSITION;
-    pictureLayer.cornerRadius = CORNERRADIUS;
-    pictureLayer.borderColor = [UIColor whiteColor].CGColor;
-    pictureLayer.borderWidth = BORDERWIDTH;
-    pictureLayer.delegate = self;
-    pictureLayer.masksToBounds = YES;
-    [self.view.layer addSublayer:pictureLayer];
-    [pictureLayer setNeedsDisplay];
+    _pictureLayer = [[CALayer alloc] init];
+    _pictureLayer.bounds = BOUNDS;
+    _pictureLayer.position = POSITION;
+    _pictureLayer.cornerRadius = CORNERRADIUS;
+    _pictureLayer.borderColor = [UIColor purpleColor].CGColor;
+    _pictureLayer.borderWidth = BORDERWIDTH;
+    _pictureLayer.delegate = self;
+    _pictureLayer.masksToBounds = YES;
+    
+    [self.view.layer addSublayer:_pictureLayer];
+    [_pictureLayer setNeedsDisplay];
 }
 
 #pragma mark - actions
@@ -83,15 +96,21 @@
 //    layer.position = [touch locationInView:self.view];
 //}
 
+- (void)transform:(id)sender {
+    id value = @(M_PI*_flag);
+    _flag = !_flag;
+    [_pictureLayer setValue:value forKeyPath:@"transform.rotation.x"];
+}
+
 #pragma mark - CALayer Delegate
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
     CGContextSaveGState(ctx);
     
-    CGContextScaleCTM(ctx, 1, -1);
-    CGContextTranslateCTM(ctx, 0, -PHOTO_HEIGHT);
+//    CGContextScaleCTM(ctx, 1, -1);
+//    CGContextTranslateCTM(ctx, 0, -PHOTO_HEIGHT);
     
-    UIImage *image = [UIImage imageNamed:@"boob.gif"];
+    UIImage *image = [UIImage imageNamed:@"elder.jpg"];
     CGContextDrawImage(ctx, CGRectMake(0, 0, PHOTO_HEIGHT, PHOTO_HEIGHT), image.CGImage);
     
     CGContextRestoreGState(ctx);
