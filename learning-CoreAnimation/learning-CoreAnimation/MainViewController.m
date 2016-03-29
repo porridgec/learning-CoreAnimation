@@ -96,6 +96,12 @@
 //    layer.position = [touch locationInView:self.view];
 //}
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInView:self.view];
+    [self translationAnimationToPoint:location];
+}
+
 - (void)transform:(id)sender {
     id value = @(M_PI*_flag);
     _flag = !_flag;
@@ -114,6 +120,32 @@
     CGContextDrawImage(ctx, CGRectMake(0, 0, PHOTO_HEIGHT, PHOTO_HEIGHT), image.CGImage);
     
     CGContextRestoreGState(ctx);
+}
+
+#pragma mark - animation
+
+- (void)translationAnimationToPoint:(CGPoint)location {
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+    basicAnimation.toValue = [NSValue valueWithCGPoint:location];
+    basicAnimation.duration = 0.5;
+    basicAnimation.delegate = self;
+    [basicAnimation setValue:[NSValue valueWithCGPoint:location] forKey:@"EndPoint"];
+    [_pictureLayer addAnimation:basicAnimation forKey:@"elder_move"];
+}
+
+#pragma mark - animation delegate
+
+- (void)animationDidStart:(CAAnimation *)anim {
+    
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    
+    _pictureLayer.position = [[anim valueForKey:@"EndPoint"] CGPointValue];
+    
+    [CATransaction commit];
 }
 
 @end
