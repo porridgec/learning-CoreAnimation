@@ -39,7 +39,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(SCREENSIZE.width / 2 - 25, 50, 50, 50);
-    button.backgroundColor = [UIColor redColor];
+    [button setTitle:@"续" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(transform:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 }
