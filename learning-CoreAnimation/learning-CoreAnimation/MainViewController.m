@@ -167,17 +167,25 @@
 - (void)keyFrameAnimation {
     CAKeyframeAnimation *keyFrameAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
     
-    NSValue *key0 = [NSValue valueWithCGPoint:_pictureLayer.position];
-    NSValue *key1 = [NSValue valueWithCGPoint:CGPointMake(120, 220)];
-    NSValue *key2 = [NSValue valueWithCGPoint:CGPointMake(75, 320)];
-    NSValue *key3 = [NSValue valueWithCGPoint:CGPointMake(180, 420)];
-    [keyFrameAnimation setValue:[NSValue valueWithCGPoint:CGPointMake(180, 420)] forKey:@"EndPoint"];
-    keyFrameAnimation.values = @[key0,key1,key2,key3];
+//    NSValue *key0 = [NSValue valueWithCGPoint:_pictureLayer.position];
+//    NSValue *key1 = [NSValue valueWithCGPoint:CGPointMake(120, 220)];
+//    NSValue *key2 = [NSValue valueWithCGPoint:CGPointMake(75, 320)];
+//    NSValue *key3 = [NSValue valueWithCGPoint:CGPointMake(180, 420)];
+//    [keyFrameAnimation setValue:[NSValue valueWithCGPoint:CGPointMake(55, 400)] forKey:@"EndPoint"];
+//    keyFrameAnimation.values = @[key0,key1,key2,key3];
+    
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, _pictureLayer.position.x, _pictureLayer.position.y);
+    CGPathAddCurveToPoint(path, NULL, 160, 280, -30, 300, 55, 400);
+    keyFrameAnimation.path = path;
+    CGPathRelease(path);
+    
     keyFrameAnimation.delegate = self;
     keyFrameAnimation.autoreverses = YES;
     keyFrameAnimation.repeatCount = HUGE_VALF;
     keyFrameAnimation.duration = 5;
-    keyFrameAnimation.beginTime = CACurrentMediaTime() + 3;
+    keyFrameAnimation.beginTime = CACurrentMediaTime() + 1;
     
     [_pictureLayer addAnimation:keyFrameAnimation forKey:@"KF_move"];
 }
