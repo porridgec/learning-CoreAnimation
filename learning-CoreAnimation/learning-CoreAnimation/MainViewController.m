@@ -99,8 +99,26 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self.view];
-    [self translationAnimationToPoint:location];
+    CAAnimation *animation = [_pictureLayer animationForKey:@"elder_move"];
+    if (animation) {
+        if (_pictureLayer.speed == 0) {
+            [self resumeAnimation];
+        } else {
+            [self pauseAnimation];
+        }
+    } else {
+        [self translationAnimationToPoint:location];
+        [self rotationAnimation];
+    }
 }
+
+//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    UITouch *touch = [touches anyObject];
+//    CGPoint location = [touch locationInView:self.view];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(translationAnimationToPoint:) object:nil];
+//    [self translationAnimationToPoint:location];
+//    [self rotationAnimation];
+//}
 
 - (void)transform:(id)sender {
     id value = @(M_PI*_flag);
@@ -113,8 +131,8 @@
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
     CGContextSaveGState(ctx);
     
-//    CGContextScaleCTM(ctx, 1, -1);
-//    CGContextTranslateCTM(ctx, 0, -PHOTO_HEIGHT);
+    CGContextScaleCTM(ctx, 1, -1);
+    CGContextTranslateCTM(ctx, 0, -PHOTO_HEIGHT);
     
     UIImage *image = [UIImage imageNamed:@"elder.jpg"];
     CGContextDrawImage(ctx, CGRectMake(0, 0, PHOTO_HEIGHT, PHOTO_HEIGHT), image.CGImage);
@@ -127,10 +145,34 @@
 - (void)translationAnimationToPoint:(CGPoint)location {
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     basicAnimation.toValue = [NSValue valueWithCGPoint:location];
-    basicAnimation.duration = 0.5;
+    basicAnimation.duration = 1.5;
     basicAnimation.delegate = self;
+    basicAnimation.removedOnCompletion = NO;
     [basicAnimation setValue:[NSValue valueWithCGPoint:location] forKey:@"EndPoint"];
     [_pictureLayer addAnimation:basicAnimation forKey:@"elder_move"];
+}
+
+- (void)rotationAnimation {
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    basicAnimation.toValue = [NSNumber numberWithFloat:M_PI_2*4];
+    basicAnimation.duration = 2.5;
+    basicAnimation.repeatDuration = HUGE_VALF;
+    basicAnimation.removedOnCompletion = NO;
+    basicAnimation.autoreverses = NO;
+    [_pictureLayer addAnimation:basicAnimation forKey:@"elder_rotation"];
+}
+
+- (void)pauseAnimation {
+    CFTimeInterval interval = [_pictureLayer convertTime:CACurrentMediaTime() fromLayer:nil];
+    _pictureLayer.timeOffset = interval;
+    _pictureLayer.speed = 0;
+}
+
+- (void)resumeAnimation {
+    CFTimeInterval beginTime = CACurrentMediaTime() - _pictureLayer.timeOffset;
+    _pictureLayer.timeOffset = 0;
+    _pictureLayer.beginTime = beginTime;
+    _pictureLayer.speed = 1;
 }
 
 #pragma mark - animation delegate
@@ -146,6 +188,7 @@
     _pictureLayer.position = [[anim valueForKey:@"EndPoint"] CGPointValue];
     
     [CATransaction commit];
+    [self pauseAnimation];
 }
 
 @end
