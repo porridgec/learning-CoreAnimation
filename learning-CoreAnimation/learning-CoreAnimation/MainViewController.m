@@ -43,7 +43,9 @@
     [button addTarget:self action:@selector(transform:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
-    [self keyFrameAnimation];
+    //[self keyFrameAnimation];
+    //[self rotationAnimation];
+    [self groupAnimation];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -154,17 +156,18 @@
     [_pictureLayer addAnimation:basicAnimation forKey:@"elder_move"];
 }
 
-- (void)rotationAnimation {
+- (CABasicAnimation *)rotationAnimation {
     CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     basicAnimation.toValue = [NSNumber numberWithFloat:M_PI_2*4];
-    basicAnimation.duration = 2.5;
+    //basicAnimation.duration = 2.5;
     basicAnimation.repeatDuration = HUGE_VALF;
     basicAnimation.removedOnCompletion = NO;
     basicAnimation.autoreverses = NO;
-    [_pictureLayer addAnimation:basicAnimation forKey:@"elder_rotation"];
+    //[_pictureLayer addAnimation:basicAnimation forKey:@"elder_rotation"];
+    return basicAnimation;
 }
 
-- (void)keyFrameAnimation {
+- (CAKeyframeAnimation *)keyFrameAnimation {
     CAKeyframeAnimation *keyFrameAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
     
 //    NSValue *key0 = [NSValue valueWithCGPoint:_pictureLayer.position];
@@ -181,13 +184,23 @@
     keyFrameAnimation.path = path;
     CGPathRelease(path);
     
-    keyFrameAnimation.delegate = self;
+    //keyFrameAnimation.delegate = self;
     keyFrameAnimation.autoreverses = YES;
     keyFrameAnimation.repeatCount = HUGE_VALF;
-    keyFrameAnimation.duration = 5;
-    keyFrameAnimation.beginTime = CACurrentMediaTime() + 1;
+    //keyFrameAnimation.duration = 5;
+    //keyFrameAnimation.beginTime = CACurrentMediaTime() + 1;
     
-    [_pictureLayer addAnimation:keyFrameAnimation forKey:@"KF_move"];
+    //[_pictureLayer addAnimation:keyFrameAnimation forKey:@"KF_move"];
+    return keyFrameAnimation;
+}
+
+- (void)groupAnimation {
+    CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
+    animationGroup.animations = @[[self rotationAnimation],[self keyFrameAnimation]];
+    animationGroup.duration = 5;
+    animationGroup.repeatCount = HUGE_VALF;
+    animationGroup.autoreverses = YES;
+    [_pictureLayer addAnimation:animationGroup forKey:@"group_ani"];
 }
 
 - (void)pauseAnimation {
