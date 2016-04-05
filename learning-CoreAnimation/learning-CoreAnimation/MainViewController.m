@@ -42,6 +42,8 @@
     [button setTitle:@"续" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(transform:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+    
+    [self keyFrameAnimation];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,21 +98,21 @@
 //    layer.position = [touch locationInView:self.view];
 //}
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self.view];
-    CAAnimation *animation = [_pictureLayer animationForKey:@"elder_move"];
-    if (animation) {
-        if (_pictureLayer.speed == 0) {
-            [self resumeAnimation];
-        } else {
-            [self pauseAnimation];
-        }
-    } else {
-        [self translationAnimationToPoint:location];
-        [self rotationAnimation];
-    }
-}
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    UITouch *touch = [touches anyObject];
+//    CGPoint location = [touch locationInView:self.view];
+//    CAAnimation *animation = [_pictureLayer animationForKey:@"elder_move"];
+//    if (animation) {
+//        if (_pictureLayer.speed == 0) {
+//            [self resumeAnimation];
+//        } else {
+//            [self pauseAnimation];
+//        }
+//    } else {
+//        [self translationAnimationToPoint:location];
+//        [self rotationAnimation];
+//    }
+//}
 
 //- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 //    UITouch *touch = [touches anyObject];
@@ -162,6 +164,24 @@
     [_pictureLayer addAnimation:basicAnimation forKey:@"elder_rotation"];
 }
 
+- (void)keyFrameAnimation {
+    CAKeyframeAnimation *keyFrameAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    
+    NSValue *key0 = [NSValue valueWithCGPoint:_pictureLayer.position];
+    NSValue *key1 = [NSValue valueWithCGPoint:CGPointMake(120, 220)];
+    NSValue *key2 = [NSValue valueWithCGPoint:CGPointMake(75, 320)];
+    NSValue *key3 = [NSValue valueWithCGPoint:CGPointMake(180, 420)];
+    [keyFrameAnimation setValue:[NSValue valueWithCGPoint:CGPointMake(180, 420)] forKey:@"EndPoint"];
+    keyFrameAnimation.values = @[key0,key1,key2,key3];
+    keyFrameAnimation.delegate = self;
+    keyFrameAnimation.autoreverses = YES;
+    keyFrameAnimation.repeatCount = HUGE_VALF;
+    keyFrameAnimation.duration = 5;
+    keyFrameAnimation.beginTime = CACurrentMediaTime() + 3;
+    
+    [_pictureLayer addAnimation:keyFrameAnimation forKey:@"KF_move"];
+}
+
 - (void)pauseAnimation {
     CFTimeInterval interval = [_pictureLayer convertTime:CACurrentMediaTime() fromLayer:nil];
     _pictureLayer.timeOffset = interval;
@@ -188,7 +208,7 @@
     _pictureLayer.position = [[anim valueForKey:@"EndPoint"] CGPointValue];
     
     [CATransaction commit];
-    [self pauseAnimation];
+    //[self pauseAnimation];
 }
 
 @end
